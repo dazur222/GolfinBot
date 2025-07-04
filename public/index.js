@@ -83,7 +83,7 @@ function newConversation(){
     document.getElementById("chat").innerHTML  = ` 
       <div class="message bot">FAQ<br>
       ¿Qué es golfin?<br>
-    ¿Cómo se juega <br>
+    ¿Cómo se juega?<br>
   ¿Cómo puedo jugar con amigos?</div>
   `
 }
@@ -103,8 +103,8 @@ function insertMessages(chat,chatData){
         let i = 0
         for(let message of chatData['conversation']){
 
-            if(i%2== 1){
-
+            if(!(i%3==0)){
+                
                 const userMsg = document.createElement('div');
                 userMsg.className = 'message user';
 
