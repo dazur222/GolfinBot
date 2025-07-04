@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GolfinBot</title>
+  <script src="index.js" defer></script>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <p id="allData"></p>
+  <input type="text" id="key" placeholder="insert key">
+  <input type="text"id="response" placeholder="insert response"style="width: 600px; height: 40px;"> 
+  <button onclick="addResponse()">Add response</button>
+  <aside class="sidebar-pretty">
+    <div class="sidebarHeader-pretty">
+      <span class="sidebarTitle-pretty">golfin'</span>
+    </div>
+    <div class="sidebarActions-pretty">
+      <button class="btns-pretty" onclick="saveConversation()">💾 Save</button>
+      <button class="btns-pretty" onclick="newConversation()">➕ New Convo</button>
+    </div>
+    <div class="sidebarHistory-pretty">
+      <span class="sidebarHistoryTitle-pretty">History</span>
+      <ul id="chatHistoryList"></ul>
+    </div>
+  </aside>
+  <div class="chat-container chat-pretty" id="chats">
+    <div id="title" class="chat-header chat-header-pretty">GolfinBot</div>
+    <div class="chat-messages" id="chat">
+      <div class="message bot message-bot-pretty"><span class="faq-title">FAQ</span><br>
+        <span class="faq-question">¿Qué es golfin?</span><br>
+        <span class="faq-question">¿Cómo se juega?</span><br>
+        <span class="faq-question">¿Cómo puedo jugar con amigos?</span>
+      </div>
+    </div>
+    <div class="chat-input chat-input-pretty">
+      <input type="text" id="input" placeholder="Type your message..." />
+      <button onclick="handleSend(event)">Send</button>
+    </div>
+  </div>
+
+  <script>
+    async function  handleSend(event) {
+      event.preventDefault();
+      const input = document.getElementById('input');
+      const chat = document.getElementById('chat');
+
+      let response = await sendPrompt(input.value) 
+      
+      console.log("la respuesta del server es")
+      console.log(response)
+
+      
+
+
+      if (!input.value.trim()) return;
+
+      // Append user message
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+
+      userMsg.textContent = input.value;
+      chat.appendChild(userMsg);
+
+      // Append bot response (static for now)
+      const botMsg = document.createElement('div');
+      botMsg.className = 'message bot';
+
+      botMsg.textContent = response.response;
+      chat.appendChild(botMsg);
+
+      input.value = '';
+      chat.scrollTop = chat.scrollHeight;
+
+    }
+      const title = document.getElementById('title');
+
+  title.addEventListener('click', () => {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = title.textContent;
+    input.style.fontSize = '2em';
+
+    // Replace the title with the input
+    title.replaceWith(input);
+    input.focus();
+
+    const save = () => {
+      const newTitle = document.createElement('div');
+    // <div id="title" class="chat-header chat-header-pretty">GolfinBot</div>
+      newTitle.id = 'title';
+      newTitle.classList = ("chat-header","chat-header-pretty")
+
+      newTitle.innerText = input.value;
+      input.replaceWith(newTitle);
+      // Reattach the event
+      newTitle.addEventListener('click', arguments.callee);
+    };
+
+    input.addEventListener('blur', save);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') save();
+    });
+  });
+  </script>
+</body>
+</html>
